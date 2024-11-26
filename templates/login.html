@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <!-- Login Form -->
+            <div class="form-box" id="login-form">
+                <h2>Login</h2>
+                <form action="{{ url_for('login') }}" method="POST">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    {% if error %}
+                    <p class="error">{{ error }}</p>
+                    {% endif %}
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" onclick="showRegisterForm()">Sign Up</a></p>
+            </div>
+
+            <!-- Register Form -->
+            <div class="form-box" id="register-form" style="display:none;">
+                <h2>Register</h2>
+                {% if error %}
+                <h2 class="error" style="color: red;">{{ error }}</h2>
+                {% endif %}
+                <form action="{{ url_for('register') }}" method="POST">
+                    <input type="text" name="user_name" placeholder="User name" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                    {% if error %}
+                    <p class="error">{{ error }}</p>
+                    {% endif %}
+                    <button type="submit">Register</button>
+                </form>
+                <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
