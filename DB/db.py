@@ -8,6 +8,7 @@ from sqlalchemy.orm.session import Session
 from typing import Type, List
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
+from uuid import uuid4
 
 from DB.tables import Base, User
 
@@ -43,7 +44,8 @@ class DB:
             User: The newly created User object.
         """
         # Create a new User instance
-        new_user = User(email=email, hashed_password=hashed_password)
+        userid = str(uuid4())
+        new_user = User(email=email, hashed_password=hashed_password, id=userid)
         # Add and commit the new user to the database
         self._session.add(new_user)
         self._session.commit()

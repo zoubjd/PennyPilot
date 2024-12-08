@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='expenses.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Expenses</h1>
+        <div class="add-expense">
+            <a href="{{ url_for('addexpense') }}">+ Add New Expense</a>
+        </div>
+        {% if expenses %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.category }}</td>
+                    <td>${{ "%.2f" | format(expense.amount) }}</td>
+                    <td>{{ expense.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        <a href="/expenses/{{ expense.id }}" class="details-link">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No expenses found. <a href="/expenses" method="POST">Add your first expense.</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>

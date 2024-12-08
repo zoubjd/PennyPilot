@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='specific_expense.css') }}">
+</head>
+<body>
+    <div class="buttons">
+        <!-- Save changes button -->
+        <form method="POST" action="/expenses/modify/{{ expense.id }}">
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" value="{{ expense.category }}" required>
+    
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" name="amount" step="0.01" value="{{ expense.amount }}" required>
+    
+            <button type="submit" class="btn save">Save Changes</button>
+        </form>
+    
+        <!-- Delete expense button -->
+        <form method="POST" action="/expenses/delete/{{ expense.id }}">
+            <button type="submit" class="btn delete">Delete</button>
+        </form>
+    </div>
+    
+    </div>
+</body>
+</html>
