@@ -83,3 +83,11 @@ Contributions are welcome! To contribute:
 5. Open a Pull Request.
 
 ---
+
+chatgpt questions after the reload:
+i just finished the main parts of the project and what was on the weeks tasks
+now I want to to see if I can add ai to the project I would like you to answer these questions for me:
+how can I add the ai?
+what do you think about postgress DB and its ai?
+what do you think about google cloud ai api? and are they any good to my project?
+if I were to add the ai what could and should it do?
