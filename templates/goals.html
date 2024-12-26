@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='goals.css') }}">
+</head>
+<body>
+    <h1>Your Goals</h1>
+    <div class="container">
+        <h1>Your Goals</h1>
+        <div class="add-expense">
+            <a class="home" href="{{ url_for('home') }}">Return Home</a>
+            <a class="add" href="{{ url_for('addgoal') }}">+ Add New Goal</a>
+        </div>
+        {% if goals %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>View Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for goal in goals %}
+                <tr>
+                    <td>${{ goal.amount }}</td>
+                    <td>{{ goal.date.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <a href="/goals/{{ goal.id }}" class="details-link">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Goals found. <a href="/goals" method="POST">Add your first goal.</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>

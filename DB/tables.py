@@ -37,7 +37,7 @@ class Expense(Base):
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))  # Use String for UUID
     category = Column(String(50), nullable=False)
     amount = Column(DECIMAL(10, 2), nullable=False)
-    date = Column(Date, nullable=False)
+    date = Column(DateTime, default=datetime.utcnow)
     user_id = Column(String(36), ForeignKey('users.id'), nullable=False)  # Match with User's id type
 
     # Relationship
@@ -50,8 +50,8 @@ class Goal(Base):
     __tablename__ = 'goals'
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))  # Use String for UUID
     amount = Column(DECIMAL(10, 2), nullable=False)
-    date = Column(Date, nullable=False)
-    achieved = Column(Boolean, default=False)
+    date = Column(DateTime, default=datetime.utcnow)
+    achieved = Column(Boolean, default=False)  # to be remouved before datawipe no need
     user_id = Column(String(36), ForeignKey('users.id'), nullable=False)  # Match with User's id type
 
     # Relationship

@@ -10,7 +10,8 @@
     <div class="container">
         <h1>Your Expenses</h1>
         <div class="add-expense">
-            <a href="{{ url_for('addexpense') }}">+ Add New Expense</a>
+            <a class="home" href="{{ url_for('home') }}">Return Home</a>
+            <a class="add" href="{{ url_for('addexpense') }}">+ Add New Expense</a>
         </div>
         {% if expenses %}
         <table>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/progressbar.js"></script>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+    <header>
+      <div>
+        <h1>PennyPilot</h1>
+      </div>
+      <nav>
+        <a href="/home">Dashboard</a>
+        <a href="/expenses">Expenses</a>
+        <a href="/goals">Goals</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </header>
+    <div class="container">
+      <!-- Dashboard content goes here -->
+      <h2>Welcome Home {{ user.user_name }}</h2>
+      <p>Your personal financial management hub.</p>
+
+      <h2>Spending Percentage</h2>
+      <div class="goals">
+        <h3 id="statusss"></h3>
+        <div id="progressbar" style="position: relative; height: 30px;"></div>
+    </div>
+
+      <div class="canvas">
+        <h3>Expenses spent daily over the last 15 days.</h3>
+        <canvas id="lineChart"></canvas>
+      </div>
+      <div class="canvas">
+        <h3>Expenses spent by category over the last 15 days.</h3>
+        <canvas id="pieChart"></canvas>
+      </div>
+    </div>
+  
+    <script src="{{ url_for('static', filename='home.js') }}"></script>
+</body>
+</html>

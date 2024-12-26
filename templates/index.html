@@ -3,14 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PennyPilot | Your Personal Finance Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-    {% if user %}
-    <h1>Hello {{ user.user_name }}</h1>
-    {% else %}
-    <h1>Hello World!</h1>
-    {% endif %}
-    
+    <div class="hero">
+        <div class="heroleft">
+            <h1>PennyPilot - Take Control of Your Finances and get help from our AI</h1>
+            <p>Track your expenses, set budgets, and achieve your financial goals with PennyPilot.</p>
+            <div class="herobtt">
+                <a href="{{ url_for('register') }}"><button>Get Started</button></a>
+                <a href="{{ url_for('login') }}"><button>Log In</button></a>
+            </div>
+        </div>
+        <img src="/static/imgs/Image1.png" alt="hero" class="heroimg">
+    </div>
+    <div class="section2">
+        <h1>Follow your expenses closely</h1>
+        <div class="section2notimg">
+            <div class="smallsec">
+                <h3>Category expenses</h3>
+                <p>track all your expenses by category to get a clear view of your spending habits</p>
+            </div>
+            <div class="smallsec">
+                <h3>Recent expenses</h3>
+                <p>get a quick overview of your recent expenses. this will help you stay on top of your spending</p>
+            </div>
+        </div>
+    </div>
+    <div class="section3">
+        <h1>Categorise your expenses with precision</h1>
+        <div class="section2notimg">
+            <div class="smallsec">
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#0e9ba3"><path d="M600-320h160v-160h-60v100H600v60Zm-120-40q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM200-480h60v-100h100v-60H200v160ZM80-200v-560h800v560H80Zm80-80h640v-400H160v400Zm0 0v-400 400Z"/></svg>
+                <h3>Personalised Categories</h3>
+                <p>Create your own categories to get a clear view of your spending habits</p>
+            </div>
+            <div class="smallsec">
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#0e9ba3"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                <h3>Automatic Categorisation</h3>
+                <p>get a quick overview of your categorised expenses. this will help you stay on top of your spending</p>
+            </div>
+    </div>
+    <div class="hero">
+        <img src="/static/imgs/Image2.png" alt="simple functionality" class="heroimg">
+        <div class="heroleft">
+            <h1 class="hero2h1">Simple and Intuitive Fonctionality</h1>
+            <div class="heroleft2">
+                <div class="card2">
+                    <h1>1</h1>
+                    <h2>Intuitive Interface</h2>
+                    <p>The interface is user-friendly and easy to navigate</p>
+                </div>
+                <div class="card2">
+                    <h1>2</h1>
+                    <h2>Quick and Easy</h2>
+                    <p>The interface is user-friendly and easy to navigate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section3 beforelast">
+        <h1>User account and Connection</h1>
+        <div class="cards">
+            <div class="minicard">
+                <h3>Easy Inscription</h3>
+                <p>Sign up and create your account with a few clicks</p>
+            </div>
+            <div class="minicard">
+                <h3>Secure Connection</h3>
+                <p>User's privacy and security are our top priority</p>
+            </div>
+            <div class="minicard">
+                <h3>Mobile Access</h3>
+                <p>Access your account from anywhere, at any time</p>
+            </div>
+        </div>
+    </div>
+    <div class="hero">
+        <div class="heroleft">
+            <h1>Start Now Mastering Your Finances</h1>
+            <p>Join PennyPilot Community today and start tracking your expenses</p>
+            <div class="herobtt">
+                <a href="{{ url_for('register')}}"><button>Get Started</button></a>
+                <a href="{{ url_for('login') }}"><button>Log In</button></a>
+            </div>
+        </div>
+        <img src="/static/imgs/Image3.png" alt="Calling you" class="heroimg">
+    </div>
 </body>
 </html>
