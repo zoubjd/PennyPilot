@@ -132,7 +132,7 @@ def addexpense():
             category = request.form.get('category')
             amount = float(request.form.get('amount'))
             expenses_db.add_expense(category=category, amount=amount, user_id=user.id)
-            return redirect('/expenses', code=200)
+            return redirect('/expenses')
         return render_template("addexpense.html", user=user)
     return render_template("login.html")
 
