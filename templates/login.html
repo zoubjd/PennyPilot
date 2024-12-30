@@ -16,7 +16,7 @@
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
                     {% if error %}
-                    <p class="error">{{ error }}</p>
+                        <h2 class="error" style="color: red;size:20px;">{{ error }}</h2>
                     {% endif %}
                     <button type="submit">Login</button>
                 </form>
@@ -27,7 +27,7 @@
             <div class="form-box" id="register-form" style="display:none;">
                 <h2>Register</h2>
                 {% if error %}
-                <h2 class="error" style="color: red;">{{ error }}</h2>
+                <h2 class="error" style="color: red;size:20px;">{{ error }}</h2>
                 {% endif %}
                 <form action="{{ url_for('register') }}" method="POST">
                     <input type="text" name="user_name" placeholder="User name" required>

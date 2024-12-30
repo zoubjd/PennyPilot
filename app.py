@@ -35,11 +35,16 @@ def home():
 @app.route('/register', methods=['GET', 'POST'], strict_slashes=False)
 def register():
     """the register route"""
+    error = None
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        user = AUTH.register_user(email, password)
+        user = AUTH._db.find_user_by(email=email)
         if user is not None:
+            error = "User already exists"
+            return render_template("login.html", error=error)
+        else:
+            user = AUTH.register_user(email, password)
             #to be redirect to the main page when created
             user_name = request.form.get('user_name')
             user.user_name = user_name
@@ -50,14 +55,13 @@ def register():
             resp = make_response(redirect('/home'))
             resp.set_cookie('session_id', session_id)
             return resp
-        else:
-            return flash("User already exists", "error")
 
-    return render_template("login.html")
+    return render_template("login.html", error=error)
 
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login():
     """the login route"""
+    error = None
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -68,11 +72,11 @@ def login():
             resp.set_cookie('session_id', session_id)
             return resp
         else:
-            flash("Invalid email or password", "error")
-    return render_template("login.html")
+            error = "Invalid email or password"
+    return render_template("login.html", error=error)
 
 
-@app.route('/sessions', methods=['GET'], strict_slashes=False)
+@app.route('/logout', methods=['GET'], strict_slashes=False)
 def logout():
     """the logout route"""
     session_id = request.cookies.get('session_id')
