@@ -45,7 +45,7 @@ function random_rgba(datalenght) {
 
 
 
-        fetch('/expenses/category')
+       /* fetch('/expenses/category')
         .then(response => response.json())
         .then(dailySpendData => {
             // Prepare data for the chart
@@ -68,7 +68,7 @@ function random_rgba(datalenght) {
                 },
             });
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => console.error('Error fetching data:', error));*/
 
 
         fetch('/goalsummary')
@@ -76,14 +76,7 @@ function random_rgba(datalenght) {
     .then(goalsummary => {
         // Prepare data for the progress bar
         let statusElement = document.getElementById('statusss');
-        let status = goalsummary.status;
 
-        // Set the status color
-        if (status === "Over budget") {
-            statusElement.style.color = "red";
-        } else if (status === "Under budget") {
-            statusElement.style.color = "green";
-        }
 
         // Set the status text
         statusElement.textContent = goalsummary.message;
@@ -92,6 +85,14 @@ function random_rgba(datalenght) {
         let goal = goalsummary.budget || 1; // Avoid division by 0
         let total = goalsummary.total_expenses || 0;
         let percentage = Math.min((total / goal) * 100, 100); // Cap at 100%
+
+        if (percentage > 80) {
+            statusElement.style.color = "Red";
+            statusElement.textContent = "Gotta minimize spendings more";
+        } else if (percentage > 50) {
+            statusElement.style.color = "orange";
+            statusElement.textContent = "Be carful you're halfway through";
+        }
 
         // Initialize and animate the progress bar
         let bar = new ProgressBar.Line('#progressbar', {
@@ -125,5 +126,64 @@ function random_rgba(datalenght) {
     .catch(error => console.error('Error fetching data:', error));
 
 
-    
+    google.charts.load('current', { packages: ['sankey'] });
+google.charts.setOnLoadCallback(drawChart);
+function normalizeData(data) {
+    return data.map(entry => ({
+        ...entry,
+        total_spent: Math.sqrt(entry.total_spent) // Use square root scaling
+    }));
+}
 
+function drawChart() {
+    fetch('/expenses/category')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched data:", data);
+            // Store original and scaled values
+            const scaledData = data.map(entry => ({
+                ...entry,
+                scaled_spent: Math.sqrt(entry.total_spent) // Scale value for visualization
+            }));
+
+            // Convert data into Sankey format using scaled values
+            const sankeyData = [["From", "To", "Value", { role: "tooltip", type: "string" }]];
+            scaledData.forEach(entry => {
+                const tooltipValue = entry.total_spent ? `$${entry.total_spent.toFixed(2)}` : "No data";
+                sankeyData.push([
+                    entry.from,
+                    entry.category,
+                    entry.scaled_spent,
+                    `${entry.category}: ${tooltipValue}`
+                ]);
+            });
+
+            // Map colors for nodes
+            const nodeColors = {};
+            scaledData.forEach(entry => {
+                nodeColors[entry.category] = entry.category === "Savings" ? '#4CAF50'  : '#F44336';
+            });
+
+            const chartData = google.visualization.arrayToDataTable(sankeyData);
+
+            const options = {
+                width: 600,
+                height: 400,
+                sankey: {
+                    node: {
+                        colors: Object.values(nodeColors),
+                        label: {
+                            fontSize: 14
+                        }
+                    },
+                    link: {
+                        colorMode: 'gradient'
+                    }
+                }
+            };
+
+            const chart = new google.visualization.Sankey(document.getElementById('sankey_chart'));
+            chart.draw(chartData, options);
+        })
+        .catch(error => console.error('Error fetching Sankey data:', error));
+}

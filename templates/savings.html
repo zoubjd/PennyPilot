@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='savings.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Savings</h1>
+        <div class="add-expense">
+            <a class="home" href="{{ url_for('home') }}">Return Home</a>
+        </div>
+        {% if savings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for saving in savings %}
+                <tr>
+                    <td>${{ "%.2f" | format(saving.amount) }}</td>
+                    <td>{{ saving.date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Currently you have no Savings</p>
+        {% endif %}
+    </div>
+</body>
+</html>

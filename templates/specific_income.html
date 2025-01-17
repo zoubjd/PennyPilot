@@ -3,52 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='specific_expense.css') }}">
+    <title>Income Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='specific_income.css') }}">
 </head>
 <body>
+    <h1>Income Details</h1>
     <div class="buttons">
         <!-- Save changes button -->
-        <form method="POST" action="/expenses/modify/{{ expense.id }}">
-            <label for="category">Category</label>
-            <input type="text" id="category" name="category" value="{{ expense.category }}" required>
-    
+        <form method="POST" action="/income/modify/{{ income.id }}">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" value="{{ income.name }}" required>
             <label for="amount">Amount</label>
-            <input type="number" id="amount" name="amount" step="0.01" value="{{ expense.amount }}" required>
-    
+            <input type="number" id="amount" name="amount" step="0.01" value="{{ income.amount }}" required>
             <label for="frequency">Select the frequency of the expense:</label>
             <select id="frequency" name="frequency">
-                {% if expense.frequency == "once" %}
+                {% if income.frequency == "once" %}
                     <option value="once" selected>Once</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
-                {% elif expense.frequency == "daily" %}
-                    <option value="once">Once</option>
-                    <option value="daily" selected>Daily</option>
+                {% elif income.frequency == "daily" %}
+                <option value="once">Once</option>
+                <option value="daily" selected>Daily</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
-                {% elif expense.frequency == "weekly" %}
+                {% elif income.frequency == "weekly" %}
                     <option value="once">Once</option>
                     <option value="daily">Daily</option>
                     <option value="weekly" selected>Weekly</option>
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
-                {% elif expense.frequency == "monthly" %}
+                    {% elif income.frequency == "monthly" %}
                     <option value="once">Once</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly" selected>Monthly</option>
                     <option value="yearly">Yearly</option>
-                {% elif expense.frequency == "yearly" %}
+                    {% elif income.frequency == "yearly" %}
                     <option value="once">Once</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                     <option value="yearly" selected>Yearly</option>
-                {% else %}
+                    {% else %}
                     <option value="once">Once</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -57,16 +56,14 @@
                 {% endif %}
             </select>
             
-    
             <button type="submit" class="btn save">Save Changes</button>
+            <a class="home btn" href="{{ url_for('home') }}">Return Home</a>
         </form>
-    
-        <!-- Delete expense button -->
-        <form method="POST" action="/expenses/delete/{{ expense.id }}">
+        
+        <!-- Delete income button -->
+        <form method="POST" action="/incomes/delete/{{ income.id }}">
             <button type="submit" class="btn delete">Delete</button>
         </form>
-    </div>
-    
     </div>
 </body>
 </html>

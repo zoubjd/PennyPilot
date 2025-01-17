@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='incomes.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Incomes</h1>
+        <div class="add-expense">
+            <a class="home" href="{{ url_for('home') }}">Return Home</a>
+            <a class="add" href="{{ url_for('addincome') }}">+ Add New Income</a>
+        </div>
+        {% if incomes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Frequency</th>
+                    <th>Date</th>
+                    <th>View Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for income in incomes %}
+                <tr>
+                    <td>{{ income.name }}</td>
+                    <td>${{ "%.2f" | format(income.amount) }}</td>
+                    <td>{{ income.frequency }}</td>
+                    <td>{{ income.date.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <a href="/income/{{ income.id }}" class="details-link">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Income records found. <a href="/addincome" method="POST">Add your first income.</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>

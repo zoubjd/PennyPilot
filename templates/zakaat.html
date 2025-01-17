@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakaat</title>
+</head>
+<body>
+    <h2>Zakaat payouts</h2>
+    {% if zakaat %}
+    <h3>you should pay ${{ zakaat }} this year</h3>
+    {% else %}
+    <h3>your savings are not enough for zakaat yet</h3>
+    {% endif %}
+    <style>
+        body {
+            text-align: center;
+        }
+        h2 {
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+    </style>
+</body>
+</html>

@@ -19,7 +19,8 @@
                 <tr>
                     <th>Category</th>
                     <th>Amount</th>
-                    <th>Date</th>
+                    <th>frequency</th>
+                    <th>date</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -28,6 +29,7 @@
                 <tr>
                     <td>{{ expense.category }}</td>
                     <td>${{ "%.2f" | format(expense.amount) }}</td>
+                    <td>{{ expense.frequency }}</td>
                     <td>{{ expense.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                     <td>
                         <a href="/expenses/{{ expense.id }}" class="details-link">View Details</a>

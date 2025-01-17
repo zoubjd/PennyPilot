@@ -21,7 +21,7 @@ class DB:
         """Initialize a new DB instance
         """
         self._engine = create_engine("sqlite:///a.db", echo=True)
-        # Base.metadata.drop_all(self._engine)
+        #Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
 
@@ -64,15 +64,9 @@ class DB:
             NoResultFound: If no user matches the criteria.
             InvalidRequestError: If invalid filtering criteria are provided.
         """
-        try:
             # Use SQLAlchemy's filter_by with **kwargs for dynamic filtering
-            user = self._session.query(User).filter_by(**kwargs).first()
-            if user is None:
-                raise NoResultFound("Not found")
-            return user
-        except InvalidRequestError as e:
-            # Raised if invalid column names are used in kwargs
-            raise InvalidRequestError("Invalid")
+        user = self._session.query(User).filter_by(**kwargs).first()
+        return user
 
     def update_user(self, user_id: int, **kwargs: List[any]) -> None:
         """Updates the user based on the id and provided attributes.

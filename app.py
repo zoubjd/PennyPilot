@@ -8,11 +8,15 @@ from flask_babel import Babel
 from datetime import datetime
 from DB.expenses import ExpensesDB
 from DB.goals import GoalsDB
+from DB.incomes import IncomesDB
+from DB.savings import SavingsDB
+from tasks.automation import start_scheduler
 
 
 AUTH = Auth()
 expenses_db = ExpensesDB(AUTH._db._session)
 goals_db = GoalsDB(AUTH._db._session)
+income_db = IncomesDB(AUTH._db._session)
 app = Flask(__name__)
 app.secret_key = "my_secret_key" 
 
@@ -48,12 +52,16 @@ def register():
             #to be redirect to the main page when created
             user_name = request.form.get('user_name')
             user.user_name = user_name
+            zakaat = request.form.get('Zakaat')
+            if zakaat == 'yes':
+                user.zakaat = True
             # Set created_at to the current datetime object
             user.created_at = datetime.utcnow() 
             AUTH._db._session.commit()
             session_id = AUTH.create_session(user.email)
             resp = make_response(redirect('/home'))
             resp.set_cookie('session_id', session_id)
+            print(user)
             return resp
 
     return render_template("login.html", error=error)
@@ -133,9 +141,13 @@ def addexpense():
     user = AUTH.get_user_from_session_id(session_id)
     if user is not None:
         if request.method == 'POST':
+            print(request.form) 
             category = request.form.get('category')
             amount = float(request.form.get('amount'))
-            expenses_db.add_expense(category=category, amount=amount, user_id=user.id)
+            frequency = request.form.get('frequency')
+            if frequency not in ['once', 'weekly', 'monthly', 'yearly']:
+                frequency = 'once'
+            expenses_db.add_expense(category=category, amount=amount, user_id=user.id, frequency=frequency)
             return redirect('/expenses')
         return render_template("addexpense.html", user=user)
     return render_template("login.html")
@@ -196,7 +208,11 @@ def categorysummary():
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
     if user:
-        categoryspend = expenses_db.expenses_by_category(user.id)
+        income = income_db.total_income(user.id)
+        totalexpenses = expenses_db.onetimeuseexpenses(user.id)
+        savings = income["total_amount"] - totalexpenses
+        incomes = income_db.findallincome(user.id)
+        categoryspend = expenses_db.expenses_by_category(user.id, savings, incomes)
         return categoryspend
     return None
 
@@ -263,10 +279,90 @@ def goalsummary():
         return totalgoals
     return None
 
+@app.route('/incomes', methods=['GET'], strict_slashes=False)
+def allincomes():
+    """get all the incomes for the user"""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        return render_template("login.html")
+    incomes = income_db.findincomes(user.id)
+    return render_template("incomes.html", user=user, incomes=incomes)
+
+@app.route('/addincome', methods=['GET' ,'POST'], strict_slashes=False)
+def addincome():
+    """Add a new income."""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is not None:
+        if request.method == 'POST':
+            amount = float(request.form.get('amount'))   
+            name = request.form.get('name')
+            frequency = request.form.get('frequency') or 'once'
+            income_db.add_income(amount=amount, user_id=user.id, name=name, frequency=frequency)
+            return redirect('/incomes')
+        return render_template("addincome.html", user=user)
+    return render_template("login.html")
+
+@app.route('/income/delete/<income_id>', methods=['POST'], strict_slashes=False)
+def deleteincome(income_id):
+    """Delete a specific income."""
+    income_db.deleteincome(income_id)
+    return redirect("/incomes")
+
+@app.route('/income/<income_id>', methods=['GET'], strict_slashes=False)
+def getspecificincome(income_id):
+    """View and modify a specific income."""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is not None:
+        income = income_db.findincomebyid(id=income_id)
+        if income is None:
+            return redirect("/incomes")
+        return render_template("specific_income.html", income=income)
+    return render_template("login.html")
+
+@app.route('/income/modify/<income_id>', methods=['POST'], strict_slashes=False)
+def modifyincome(income_id):
+    """Modify a specific income."""
+    income = income_db.findincomebyid(id=income_id)
+    if income is None:
+        return redirect("/incomes")
+    
+    amount = float(request.form.get('amount'))
+    frequency = request.form.get('frequency')
+    name = request.form.get('name')
+    income_db.modify(income_id, amount=amount, frequency=frequency, name=name)
+    return redirect("/incomes")
+
+@app.route('/savings', methods=['GET'], strict_slashes=False)
+def savings():
+    """get all the savings for the user"""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        return render_template("login.html")
+    savings = SavingsDB.findallsavings(user.id)
+    return render_template("savings.html", user=user, savings=savings)
+
+@app.route('/zakaat', methods=['GET'], strict_slashes=False)
+def zakaat():
+    """path for the zakaat page"""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        return render_template("login.html")
+    zakaat = SavingsDB.calculate_zakaat(user.id)
+    return render_template("zakaat.html", user=user, zakaat=zakaat)
+
+
+
+
 
 
 
 
 
 if __name__ == "__main__":
+    start_scheduler(engine=AUTH._db._engine)
     app.run(host="0.0.0.0", port=5000)
