@@ -167,7 +167,6 @@ class ExpensesDB:
         # Execute the query
         results = self._session.execute(text(query)).fetchall()
 
-        # Convert results to a list of dictionaries
         return results[0][0]
 
 
