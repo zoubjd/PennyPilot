@@ -17,6 +17,7 @@ AUTH = Auth()
 expenses_db = ExpensesDB(AUTH._db._session)
 goals_db = GoalsDB(AUTH._db._session)
 income_db = IncomesDB(AUTH._db._session)
+savings_db = SavingsDB(AUTH._db._session)
 app = Flask(__name__)
 app.secret_key = "my_secret_key" 
 
@@ -342,7 +343,7 @@ def savings():
     user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         return render_template("login.html")
-    savings = SavingsDB.findallsavings(user.id)
+    savings = savings_db.findallsavings(user_id=user.id)
     return render_template("savings.html", user=user, savings=savings)
 
 @app.route('/zakaat', methods=['GET'], strict_slashes=False)
@@ -352,7 +353,7 @@ def zakaat():
     user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         return render_template("login.html")
-    zakaat = SavingsDB.calculate_zakaat(user.id)
+    zakaat = savings_db.calculate_zakaat(user.id)
     return render_template("zakaat.html", user=user, zakaat=zakaat)
 
 

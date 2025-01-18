@@ -23,9 +23,9 @@ class SavingsDB:
         self._session.commit()
         return savings
     
-    def findallsavings(self, user_id: int):
+    def findallsavings(self, **kwargs: List[any]):
         """find all savings for a specific user."""
-        result = self._session.query(Savings).filter_by(user_id=user_id).all()
+        result = self._session.query(Savings).filter_by(**kwargs).all()
         return result
     
     def calculate_zakaat(self, user_id: int) -> float:

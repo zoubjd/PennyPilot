@@ -114,18 +114,13 @@ def add_savings_at_end_of_month():
                 total_income = session.execute(text(query)).fetchall()
                 total_income = total_income[0][0]
                 query = f"""
-                SELECT 
-                    DATE(date) AS day, 
+                SELECT
                     SUM(amount) AS total_spent
                 FROM 
                     expenses
                 WHERE 
                     user_id = '{user.id}'
                     AND date >= DATE('now', '-30 days')
-                GROUP BY 
-                    DATE(date)
-                ORDER BY 
-                    DATE(date) ASC;
                 """
     
                 # Execute the query
@@ -147,6 +142,7 @@ def add_savings_at_end_of_month():
         print(f"Error in add_savings_at_end_of_month: {e}")
     finally:
         session.close()
+
 
 def start_scheduler(engine):
     """Start the APScheduler with SQLAlchemy job store."""
@@ -182,6 +178,5 @@ def start_scheduler(engine):
         id='add_savings_at_end_of_month',
         replace_existing=True
     )
-
     scheduler.start()
     return scheduler

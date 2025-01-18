@@ -127,7 +127,7 @@ class ExpensesDB:
             data.append({"from": income["name"], "category": "income", "total_spent": income["amount"]})
         return jsonify(data)
     
-    def total_expenses(self, user_id: int) -> List[dict]:
+    def total_expenses(self, user_id: str) -> List[dict]:
         """find all daily expenses for a specific user."""
         if not user_id:
             return jsonify({"error": "Unauthorized"}), 401
@@ -149,7 +149,7 @@ class ExpensesDB:
         data = [{"total_amount": row[0]} for row in results]
         return data[0]
 
-    def onetimeuseexpenses(self, user_id: int) -> List[dict]:
+    def onetimeuseexpenses(self, user_id: str) -> float:
         """find all daily expenses for a specific user."""
         if not user_id:
             return jsonify({"error": "Unauthorized"}), 401
